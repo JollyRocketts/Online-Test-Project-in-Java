@@ -3,24 +3,39 @@ import java.awt.event.*;
 import java.util.Arrays;
 import java.util.Objects;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class OnlineTest extends JFrame implements ActionListener {
+public class OnlineTest extends JFrame implements ActionListener, ChangeListener {
 
     JLabel l;
+    JLabel v;
     JRadioButton[] jb = new JRadioButton[5]; //The 5th button is an invisible button that will make it so that the selected option resets for each question
     JButton b1, b2;
     ButtonGroup bg;
     JTextField jt;
+    JSlider js;
 
     int count = 0, current = 0, x = 1, y = 1, now = 0;
-    int[] m = new int[10];
+    int[] m = new int[11];
 
     OnlineTest(String s) {
         super(s); //Sets the title
         l = new JLabel(); //This will be used to display questions.
         add(l);
+        v = new JLabel();
+        add(v);
+
         bg = new ButtonGroup();
         jt = new JTextField();
+
+        js = new JSlider(0,100,50);
+        js.setPaintTicks(true);
+        js.setPaintTrack(true);
+        js.setPaintLabels(true);
+        js.setMinorTickSpacing(1);
+        js.setMajorTickSpacing(10);
+        js.addChangeListener(this);
 
         for(int i=0;i<5;i++) {
             jb[i] = new JRadioButton();
@@ -35,11 +50,15 @@ public class OnlineTest extends JFrame implements ActionListener {
         add(b1);
         add(b2);
         add(jt);
+        add(js);
+
         jt.setVisible(false);
+        js.setVisible(false);
 
         set();
 
         l.setBounds(30, 40, 450, 20);
+        v.setBounds(168, 160, 20, 20);
         jb[0].setBounds(50, 80, 150, 20);
         jb[1].setBounds(50, 110, 150, 20);
         jb[2].setBounds(50, 140, 150, 20);
@@ -47,6 +66,7 @@ public class OnlineTest extends JFrame implements ActionListener {
         b1.setBounds(100, 240, 100, 30);
         b2.setBounds(270, 240, 100, 30);
         jt.setBounds(50, 80, 200, 20);
+        js.setBounds(75, 100, 200, 40);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
@@ -62,16 +82,19 @@ public class OnlineTest extends JFrame implements ActionListener {
                 //System.out.println(count);
             }
             now++;
-            if(current<9) {
+            if(current<10) {
                 //current++;
                 current = now;
             }
             //System.out.println("Curr  : "+current);
             set();
-            if(current == 9) {
+
+            if(current == 10) {
                 b1.setEnabled(false);
                 b2.setText("Result");
+                v.setVisible(false);
             }
+
             if(current == 1) {
 //                if(jt.isDisplayable()) {
 //                    System.out.println("yes");
@@ -85,14 +108,22 @@ public class OnlineTest extends JFrame implements ActionListener {
 
                 jt.setVisible(true);
             }
+            else if(current == 9) {
+                js.setVisible(true);
+                for(int i=0;i<4;i++) {
+                    jb[i].setVisible(false);
+                }
+            }
             else {
                 jt.setVisible(false);
+                js.setVisible(false);
 
                 for(int i=0;i<4;i++) {
                     jb[i].setVisible(true);
                 }
             }
         }
+
         if(ae.getActionCommand().equals("Bookmark")) { //Using this instead of getSource command because we're changing the button for last question to Result
             JButton bk = new JButton("Bookmark "+x);
             bk.setBounds(480, 20+30*x, 100, 30);
@@ -144,6 +175,10 @@ public class OnlineTest extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Correct answer: "+count);
             System.exit(0);
         }
+    }
+
+    public void stateChanged(ChangeEvent e) {
+        v.setText(String.valueOf(js.getValue()));
     }
 
     //Questionnaire
@@ -225,7 +260,12 @@ public class OnlineTest extends JFrame implements ActionListener {
         }
 
         if(current == 9) {
-            l.setText("Q.10: What was his first purchase?");
+            l.setText("Q.10: What was his percentage in 12th Boards?");
+            v.setText(String.valueOf(js.getValue()));
+        }
+
+        if(current == 10) {
+            l.setText("Q.11: What was his first purchase?");
             jb[0].setText("Sneakers");
             jb[1].setText("Headphones");
             jb[2].setText("Cocktail Salami");
@@ -280,6 +320,10 @@ public class OnlineTest extends JFrame implements ActionListener {
         }
 
         if(current == 9) {
+            return(Objects.equals(js.getValue(),97));
+        }
+
+        if(current == 10) {
             return(jb[2].isSelected());
         }
 
