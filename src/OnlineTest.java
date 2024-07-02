@@ -13,7 +13,7 @@ public class OnlineTest extends JFrame implements ActionListener {
     int[] m = new int[10];
 
     OnlineTest(String s) {
-        super(s);
+        super(s); //Sets the title
         l = new JLabel();
         add(l);
         bg = new ButtonGroup();
@@ -21,7 +21,7 @@ public class OnlineTest extends JFrame implements ActionListener {
         for(int i=0;i<5;i++) {
             jb[i] = new JRadioButton();
             add(jb[i]);
-            bg.add(jb[i]);
+            bg.add(jb[i]); //So that only 1 option can be selected and selected position resets after each question
         }
 
         b1 = new JButton("Next");
@@ -97,6 +97,7 @@ public class OnlineTest extends JFrame implements ActionListener {
         }
     }
 
+    //Questionnaire
     void set() {
         jb[4].setSelected(true);
 
@@ -180,6 +181,55 @@ public class OnlineTest extends JFrame implements ActionListener {
             jb[3].setText("Movie Tickets");
         }
 
+        l.setBounds(30, 40, 450, 20);
 
+        for(int i=0,j=0;i<=90;i+=30,j++) {
+            jb[j].setBounds(50, 80+i, 200, 20);
+        }
+    }
+
+    //Answer sheet
+    boolean check() {
+        if(current == 0) {
+            return(jb[1].isSelected());
+        }
+
+        if(current == 1) {
+            return(jb[0].isSelected());
+        }
+
+        if(current == 2) {
+            return(jb[3].isSelected());
+        }
+
+        if(current == 3) {
+            return(jb[0].isSelected());
+        }
+
+        if(current == 4) {
+            return(jb[3].isSelected());
+        }
+
+        if(current == 5) {
+            return(jb[3].isSelected());
+        }
+
+        if(current == 6) {
+            return(jb[1].isSelected());
+        }
+
+        if(current == 7) {
+            return(jb[3].isSelected());
+        }
+
+        if(current == 8) {
+            return(jb[3].isSelected());
+        }
+
+        if(current == 9) {
+            return(jb[2].isSelected());
+        }
+
+        return false;
     }
 }
