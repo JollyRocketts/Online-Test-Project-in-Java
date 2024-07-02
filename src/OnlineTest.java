@@ -15,6 +15,7 @@ public class OnlineTest extends JFrame implements ActionListener, ChangeListener
     ButtonGroup bg;
     JTextField jt;
     JSlider js;
+    JCheckBox[] jc = new JCheckBox[4];
 
     int count = 0, current = 0, x = 1, y = 1, now = 0;
     int[] m = new int[11];
@@ -43,6 +44,11 @@ public class OnlineTest extends JFrame implements ActionListener, ChangeListener
             bg.add(jb[i]); //So that only 1 option can be selected
         }
 
+        for(int i=0;i<4;i++) {
+            jc[i] = new JCheckBox();
+            add(jc[i]);
+        }
+
         b1 = new JButton("Next");
         b2 = new JButton("Bookmark");
         b1.addActionListener(this);
@@ -54,6 +60,10 @@ public class OnlineTest extends JFrame implements ActionListener, ChangeListener
 
         jt.setVisible(false);
         js.setVisible(false);
+        jc[0].setVisible(false);
+        jc[1].setVisible(false);
+        jc[2].setVisible(false);
+        jc[3].setVisible(false);
 
         set();
 
@@ -67,6 +77,10 @@ public class OnlineTest extends JFrame implements ActionListener, ChangeListener
         b2.setBounds(270, 240, 100, 30);
         jt.setBounds(50, 80, 200, 20);
         js.setBounds(75, 100, 200, 40);
+        jc[0].setBounds(50, 80, 200, 20);
+        jc[1].setBounds(50, 110, 200, 20);
+        jc[2].setBounds(50, 140, 200, 20);
+        jc[3].setBounds(50, 170, 200, 20);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
@@ -108,6 +122,12 @@ public class OnlineTest extends JFrame implements ActionListener, ChangeListener
 
                 jt.setVisible(true);
             }
+            else if(current == 7) {
+                for(int i=0;i<4;i++) {
+                    jc[i].setVisible(true);
+                    jb[i].setVisible(false);
+                }
+            }
             else if(current == 9) {
                 js.setVisible(true);
                 for(int i=0;i<4;i++) {
@@ -117,8 +137,8 @@ public class OnlineTest extends JFrame implements ActionListener, ChangeListener
             else {
                 jt.setVisible(false);
                 js.setVisible(false);
-
                 for(int i=0;i<4;i++) {
+                    jc[i].setVisible(false);
                     jb[i].setVisible(true);
                 }
             }
@@ -244,11 +264,11 @@ public class OnlineTest extends JFrame implements ActionListener, ChangeListener
         }
 
         if(current == 7) {
-            l.setText("Q.8: What is the name of his dog?");
-            jb[0].setText("Snowy");
-            jb[1].setText("Flaaffy");
-            jb[2].setText("Luffy");
-            jb[3].setText("He doesn't have a dog.");
+            l.setText("Q.8: What is/are the name of his dog(s)?");
+            jc[0].setText("Snowy");
+            jc[1].setText("Flaaffy");
+            jc[2].setText("Luffy");
+            jc[3].setText("He doesn't have a dog.");
         }
 
         if(current == 8) {
@@ -312,7 +332,7 @@ public class OnlineTest extends JFrame implements ActionListener, ChangeListener
         }
 
         if(current == 7) {
-            return(jb[3].isSelected());
+            return(jc[3].isSelected()&&!jc[0].isSelected()&&!jc[1].isSelected()&&!jc[2].isSelected());
         }
 
         if(current == 8) {
