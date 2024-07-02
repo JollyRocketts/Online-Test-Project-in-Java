@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
+import java.util.Objects;
 import javax.swing.*;
 
 public class OnlineTest extends JFrame implements ActionListener {
@@ -9,6 +10,7 @@ public class OnlineTest extends JFrame implements ActionListener {
     JRadioButton[] jb = new JRadioButton[5]; //The 5th button is an invisible button that will make it so that the selected option resets for each question
     JButton b1, b2;
     ButtonGroup bg;
+    JTextField jt;
 
     int count = 0, current = 0, x = 1, y = 1, now = 0;
     int[] m = new int[10];
@@ -18,6 +20,7 @@ public class OnlineTest extends JFrame implements ActionListener {
         l = new JLabel(); //This will be used to display questions.
         add(l);
         bg = new ButtonGroup();
+        jt = new JTextField();
 
         for(int i=0;i<5;i++) {
             jb[i] = new JRadioButton();
@@ -31,7 +34,11 @@ public class OnlineTest extends JFrame implements ActionListener {
         b2.addActionListener(this);
         add(b1);
         add(b2);
+        add(jt);
+        jt.setVisible(false);
+
         set();
+
         l.setBounds(30, 40, 450, 20);
         jb[0].setBounds(50, 80, 150, 20);
         jb[1].setBounds(50, 110, 150, 20);
@@ -39,6 +46,7 @@ public class OnlineTest extends JFrame implements ActionListener {
         jb[3].setBounds(50, 170, 150, 20);
         b1.setBounds(100, 240, 100, 30);
         b2.setBounds(270, 240, 100, 30);
+        jt.setBounds(50, 80, 200, 20);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
@@ -63,6 +71,26 @@ public class OnlineTest extends JFrame implements ActionListener {
             if(current == 9) {
                 b1.setEnabled(false);
                 b2.setText("Result");
+            }
+            if(current == 1) {
+//                if(jt.isDisplayable()) {
+//                    System.out.println("yes");
+//                }
+//                else {
+//                    System.out.println("no");
+//                }
+                for(int i=0;i<4;i++) {
+                    jb[i].setVisible(false);
+                }
+
+                jt.setVisible(true);
+            }
+            else {
+                jt.setVisible(false);
+
+                for(int i=0;i<4;i++) {
+                    jb[i].setVisible(true);
+                }
             }
         }
         if(ae.getActionCommand().equals("Bookmark")) { //Using this instead of getSource command because we're changing the button for last question to Result
@@ -131,11 +159,13 @@ public class OnlineTest extends JFrame implements ActionListener {
         }
 
         if(current == 1) {
-            l.setText("Q.2: When is the creator's birthday?");
-            jb[0].setText("Sep 7");
-            jb[1].setText("July 9");
-            jb[2].setText("Sep 9");
-            jb[3].setText("July 7");
+            //setVisible(false);
+            //setVisible(true);
+            l.setText("Q.2: When is the creator's birthday? (DD-MM-YYYY)");
+//            jb[0].setText("Sep 7");
+//            jb[1].setText("July 9");
+//            jb[2].setText("Sep 9");
+//            jb[3].setText("July 7");
         }
 
         if(current == 2) {
@@ -217,7 +247,8 @@ public class OnlineTest extends JFrame implements ActionListener {
         }
 
         if(current == 1) {
-            return(jb[0].isSelected());
+            //return(jb[0].isSelected());
+            return(Objects.equals(jt.getText(), "07-09-2003"));
         }
 
         if(current == 2) {
