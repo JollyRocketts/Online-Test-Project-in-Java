@@ -1,11 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
 import javax.swing.*;
 
 public class OnlineTest extends JFrame implements ActionListener {
 
     JLabel l;
-    JRadioButton[] jb = new JRadioButton[5];
+    JRadioButton[] jb = new JRadioButton[5]; //The 5th button is an invisible button that will make it so that the selected option resets for each question
     JButton b1, b2;
     ButtonGroup bg;
 
@@ -14,14 +15,14 @@ public class OnlineTest extends JFrame implements ActionListener {
 
     OnlineTest(String s) {
         super(s); //Sets the title
-        l = new JLabel();
+        l = new JLabel(); //This will be used to display questions.
         add(l);
         bg = new ButtonGroup();
 
         for(int i=0;i<5;i++) {
             jb[i] = new JRadioButton();
             add(jb[i]);
-            bg.add(jb[i]); //So that only 1 option can be selected and selected position resets after each question
+            bg.add(jb[i]); //So that only 1 option can be selected
         }
 
         b1 = new JButton("Next");
@@ -32,66 +33,86 @@ public class OnlineTest extends JFrame implements ActionListener {
         add(b2);
         set();
         l.setBounds(30, 40, 450, 20);
-        jb[0].setBounds(50, 80, 100, 20);
-        jb[1].setBounds(50, 110, 100, 20);
-        jb[2].setBounds(50, 140, 100, 20);
-        jb[3].setBounds(50, 170, 100, 20);
+        jb[0].setBounds(50, 80, 150, 20);
+        jb[1].setBounds(50, 110, 150, 20);
+        jb[2].setBounds(50, 140, 150, 20);
+        jb[3].setBounds(50, 170, 150, 20);
         b1.setBounds(100, 240, 100, 30);
         b2.setBounds(270, 240, 100, 30);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
-        setLocation(250, 100);
+        setLocation(250, 100); //The location where window will open on your screen
         setVisible(true);
         setSize(600, 350);
     }
 
     public void actionPerformed(ActionEvent ae) {
-        if(ae.getSource() == b1) {
+        if(ae.getSource() == b1) { //If Next is pressed
             if(check()) {
                 count++;
+                //System.out.println(count);
             }
-            current++;
+            now++;
+            if(current<9) {
+                //current++;
+                current = now;
+            }
+            //System.out.println("Curr  : "+current);
             set();
             if(current == 9) {
                 b1.setEnabled(false);
                 b2.setText("Result");
             }
         }
-        if(ae.getActionCommand().equals("Bookmark")) {
-            JButton bk = new JButton("Bookmark"+x);
+        if(ae.getActionCommand().equals("Bookmark")) { //Using this instead of getSource command because we're changing the button for last question to Result
+            JButton bk = new JButton("Bookmark "+x);
             bk.setBounds(480, 20+30*x, 100, 30);
             add(bk);
             bk.addActionListener(this);
+            now++;
+            //now = current;
             m[x] = current;
             x++;
             current++;
             set();
             if(current == 9) {
                 b2.setText("Result");
+                b1.setEnabled(false);
             }
             setVisible(false);
-            setVisible(true);
+            setVisible(true); //These 2 commands basically close and reopen the window with the newly added bookmark buttons
         }
 
         for(int i=0,y=1;i<x;i++,y++) {
-            if(ae.getActionCommand().equals("Bookmark"+y)) {
+            if(ae.getActionCommand().equals("Bookmark "+y)) {
+
+                //System.out.println("Curr before: "+current);
                 if(check()) {
                     count++;
+                    //System.out.println(count);
                 }
+
                 now = current;
                 current = m[y];
+                //System.out.println("Now: "+now+" Current: "+current+" m: "+ Arrays.toString(m));
+                //current++;
+                //System.out.println("Curr after: "+current);
                 set();
                 ((JButton)ae.getSource()).setEnabled(false);
-                current = now;
+                //current = now;
+                //System.out.println("Curr now: "+current);
+                //System.out.println("Now: "+now);
             }
         }
 
         if(ae.getActionCommand().equals("Result")) {
             if(check()) {
                 count++;
+                //System.out.println(count+" "+ current);
             }
             current++;
+            //System.out.println("Curr: "+current);
             JOptionPane.showMessageDialog(this, "Correct answer: "+count);
             System.exit(0);
         }
@@ -191,6 +212,7 @@ public class OnlineTest extends JFrame implements ActionListener {
     //Answer sheet
     boolean check() {
         if(current == 0) {
+            //System.out.println("Selected: "+bg.getSelection());
             return(jb[1].isSelected());
         }
 
@@ -230,6 +252,7 @@ public class OnlineTest extends JFrame implements ActionListener {
             return(jb[2].isSelected());
         }
 
+        //System.out.println("False"+current);
         return false;
     }
 }
